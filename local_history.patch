@@ -1,0 +1,62 @@
+Index: 37_solveSudoku.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- 37_solveSudoku.py	(revision )
++++ 37_solveSudoku.py	(revision )
+@@ -38,27 +38,25 @@
+             self.board = board
+         if not self.board:
+             available = set()
+-            key = 0
+             for i in left.keys():
+                 if left[i] != 0:
+                     for r in remain:
+-                        if r[0] not in taken_i[key] and r[1] not in taken_j[key] and (r[0] // 3, r[1] // 3) not in taken_s[key]:
+-                            available.add(r)
+-                    if not available:
+-                        return
+-            for pos in available:
++                        if r[0] not in taken_i[i] and r[1] not in taken_j[i] and (r[0] // 3, r[1] // 3) not in taken_s[i]:
++                            remain.remove(r)
++                            available.add((r, i))
++                            break
++            if not available:
++                return
++            # print(available)
++            # print(remain)
++            for pos, key in available:
+                 taken_i[key].add(pos[0])
+                 taken_j[key].add(pos[1])
+                 taken_s[key].add((pos[0]//3, pos[1]//3))
+                 left[key] -= 1
+-                remain.remove(pos)
+-                self.backtrack(left, taken_i, taken_j, taken_s, remain, board, key, pos)
+-                remain.add(pos)
+-                left[key] += 1
+-                taken_i[key].remove(pos[0])
+-                taken_j[key].remove(pos[1])
+-                taken_s[key].remove((pos[0] // 3, pos[1] // 3))
+-
++                # remain.remove(pos)
++                board[pos[0]][pos[1]] = key
++            self.backtrack(left, taken_i, taken_j, taken_s, remain, board)
+     def solveSudoku(self, board):
+         """
+         :type board: List[List[str]]
+@@ -92,13 +90,7 @@
+                     taken_j[c].add(j)
+                     taken_s[c].add((i // 3, j // 3))
+                     left[c] -= 1
+-        key = "0"
+-        start = (0, 0)
+-        for r in remain:
+-            if r[0] not in taken_i[key] and r[1] not in taken_j[key] and (r[0] // 3, r[1] // 3) not in taken_s[key]:
+-                start = r
+-        remain.remove(start)
+-        self.backtrack(left, taken_i, taken_j, taken_s, remain, board, key, start)
++        self.backtrack(left, taken_i, taken_j, taken_s, remain, board)
+         print(self.board)
+ 
+ 

@@ -1,0 +1,346 @@
+# encoding=utf-8
+
+"""
+left_nums: 候选的数
+nums_to_add: 还要选择的数的个数
+cur_list: 当前已选数的列表
+"""
+
+
+def arrange(left_nums, nums_to_add, cur_list):
+    # 已经选了所有的数，输出，终止递归
+    if nums_to_add == 0:
+        print cur_list
+    else:
+        for n in left_nums:
+            # 遍历候选的数，每次移除当前数并将剩下的候选数列表作为下一次的候选数
+            temp = list(left_nums)
+            temp.remove(n)
+            # 执行递归调用，更新待选择数的个数和当前列表
+            arrange(temp, nums_to_add - 1, cur_list + [n])
+
+
+left_nums = range(5)           # 用于测试的输入
+arrange(left_nums, 2, [])
+
+==================================================================================================================================================================================
+
+# encoding=utf-8
+
+
+def LCS(a, b):
+    # 为了让算法的外层循环尽量小，如果a的长度较大，就交换a和b
+    if len(a) > len(b):
+        a, b = b, a
+
+    total = [0] * len(b)        # 使用total来存放遍历中每个位置上最长序列的长度
+    cur = []                    # 使用Cur来存放遍历中若干个位置上的最长序列
+
+    # 初始化a中第一个字母和b比较而产生的total和cur
+    i = 0
+    for i in range(len(b)):
+        if a[0] == b[i]:
+            total[i] = 1
+            break
+        cur.append("")
+
+    for j in range(i, len(b)):
+        total[j] = 1
+        cur.append(a[0])
+
+    # 为方便在下边的循环中处理第一个位置的值，在total和cur前边各加上一个空的值
+    total = [0] + total
+    cur = ["", ] + cur
+
+    # 外层循环中用a[i]分别跟b中的字母比较，每次循环更新total和cur
+    for i in range(1, len(a)):
+        cur_char = a[i]
+        temp_total = list(total)  # 保存一个total和cur的复制，用于在a[i]==b[j]时改变值
+        temp_cur = list(cur)
+        for j in range(0, len(b)):
+            # 利用ppt上的规则改变total的值，对应地改变cur的值
+            if cur_char == b[j]:
+                total[j + 1] = temp_total[j] + 1
+                cur[j + 1] = temp_cur[j] + cur_char
+            elif total[j] > total[j + 1]:
+                cur[j + 1] = cur[j]
+                total[j + 1] = total[j]
+    print total
+    print cur
+    print cur[-1], total[-1]
+
+
+LCS("abcdefgh", "a1b2c3d4e5f6g7h8")
+==================================================================================================================================================================================
+
+# encoding=utf-8
+
+matrix_shapes = [(30, 35), (35, 15), (15, 5), (5, 10), (10, 20), (20, 25)]
+
+
+def calculate_path(matrix_shapes):
+    # sums[i,j]存放从Ai连乘到Aj的最小用时
+    sums = [[0 for i in range(len(matrix_shapes))]
+            for j in range(len(matrix_shapes))]
+    # c[j,j]存放从Ai连乘到Aj时，中间从哪个位置切开
+    c = [[0 for i in range(len(matrix_shapes))]
+         for j in range(len(matrix_shapes))]
+    # 初始化Ai×A（i+1）需要的乘法数
+    for i in range(len(matrix_shapes) - 1):
+        sums[i][i + 1] = matrix_shapes[i][0] * \
+            matrix_shapes[i][1] * matrix_shapes[i + 1][1]
+    # i表示连乘的长度，每个循环都计算Aj×...×A(j+i)需要的乘法数
+    for i in range(2, len(matrix_shapes)):
+        # j表示连乘起始的位置
+        for j in range(len(matrix_shapes) - i):
+            min_ = float("Inf")
+            # ｋ表示切开的位置，在ｊ到ｊ＋ｉ之间寻找ｋ时，更新ｓｕｍｓ矩阵和ｃ矩阵
+            for k in range(j, j + i):
+                sum_ = sums[j][k] + matrix_shapes[j][0] * matrix_shapes[
+                    k][1] * matrix_shapes[j + i][1] + sums[k + 1][j + i]
+                if sum_ < min_:
+                    min_ = sum_
+                    sums[j][j + i] = min_
+                    c[j][j + i] = k
+    print sums
+    print c                     # 下标是从０开始的，所以和ｐｐｔ上的ｃ矩阵有不同
+    return c
+
+
+# 递归调用build_str来生成连乘的路径
+# ｃ是上一个函数算出的ｃ矩阵，ｉ，ｊ表示当前在ｃ中的位置
+# left默认为true, 表示当前结果在乘号左边，直接输出即可，不用加括号，否则要加括号
+def build_str(c, i, j, left=True):
+    # 如果当前只有一个矩阵或两个矩阵已经相邻，中间没有可以切分的点，就直输出，否则递归调用
+    if i == j:
+        return "A%d" % (i + 1)
+    elif j - i == 1:
+        content = "A%d*A%d" % (i + 1, j + 1)
+    else:
+        content = build_str(c, i, c[i][j]) + "*" + build_str(
+            c, c[i][j] + 1, j, False)
+    if not left:
+        return "(" + content + ")"
+    return content
+
+
+c = calculate_path(matrix_shapes)
+print build_str(c, 0, len(matrix_shapes) - 1)
+
+==================================================================================================================================================================================
+
+
+#define TEST_TIMES 1
+#define N 5000
+
+
+#include <iostream>
+#include <stack>
+#include <math.h>
+#include <chrono>
+#include <algorithm>		// shuffle不是在random里的
+#include <random>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <limits.h>
+#include <set>
+#include <fstream>
+using namespace std;
+int conflict(int arrange[], int n){
+  int total = 0;
+  for(int i=0;i<n-1;i++)
+    for(int j=i+1;j<n;j++){
+      if(j-i == abs(arrange[j]-arrange[i])){
+	total++;
+      }
+    }
+  return total;
+}
+
+int partial_conflict(int arrange[], int n, int i, int j){
+  int total = 0;
+  for(int k=0;k<n;k++){
+    if(abs(k-i) == abs(arrange[k]-arrange[i]))
+	total++;
+    if(abs(k-j) == abs(arrange[k]-arrange[j]))
+	total++;
+  }
+  return total;
+}
+
+int * initial(int n){
+  int * a = new int[n];
+  set<int> s= set<int>();
+  a[0] = 0;
+  s.insert(0);
+  for(int i=1;i<n;i++){
+    int temp = (a[i-1] + i) % n;
+    while(s.find(temp)!=s.end())
+      temp = (temp + 11) % n;
+    a[i] = temp;
+    s.insert(temp);
+  }
+  return a;
+}
+
+int * n_queen(int n){
+  int *a = new int[n];
+  for(int i=0;i<n;i++)
+    a[i] = i+1;
+  unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+  shuffle(a, a + n,default_random_engine(seed));
+  a = initial(n);
+  int cur_conflict = conflict(a, n);
+  int last_i = 0;
+  int last_j = 0;
+  while(true){
+    cout << cur_conflict << endl;
+    bool flag = false;		// flag表示一次迭代中是否找到了冲突更少的排列
+    for(int i=1;i<n;i++){
+      int temp_i = (last_i + i) % n;
+      for(int j=1;j<n;j++){
+	int temp_j = (last_j + j) % n;
+	if(temp_i==temp_j)
+	  continue;
+
+	int* temp = new int[n];
+	memcpy(temp, a, n*sizeof(int)); // 注意这里应以字节为单位
+
+	int before_conflict = partial_conflict(temp, n, temp_i,temp_j);
+	swap(temp[temp_i], temp[temp_j]);
+	int after_conflict = partial_conflict(temp,n,temp_i,temp_j);
+
+	if(after_conflict<before_conflict){
+	  int c = cur_conflict + (after_conflict - before_conflict);
+	  if(c==0 && conflict(temp,n)==0)
+	      return temp;
+	  free(a);		// 防止内存泄露
+	  a = temp;		// 更新排列
+	  cur_conflict = c;	// 更新当前冲突
+	  flag = true;
+	  last_j = temp_j;
+	  break;
+	}else
+	  free(temp);		// 防止内存泄露
+      }
+      if(flag){
+	last_i = temp_i;
+	break;
+      }
+    }
+    if(!flag){			// 陷入局部最优，则重新随机生成a
+      a = new int[n];
+      for(int i=0;i<n;i++)
+	a[i] = i+1;
+      unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+      shuffle(a, a + n,default_random_engine(seed));
+      cur_conflict = conflict(a, n);
+      last_i = 0;
+      last_j = 0;
+    }
+  }
+}
+
+int main(int argc, char *argv[])
+{
+  const time_t a = time(NULL);
+  ofstream out("../output2.txt");
+  out<< "begin" << endl;
+  for(int i=0;i<TEST_TIMES;i++){
+    int * result = n_queen(N);
+    cout << i << "---------------" << endl;
+    const time_t b = time(NULL);
+    cout << b-a << "/" << (i+1) << endl;
+    out << b-a << "/" << (i+1) << endl;
+  }
+  return 0;
+}
+// 问题规模：　采用了partial_conflict后的时间　-> 删除了栈后的时间　->　最终版本的时间(N/A表示未测试，大体上是这样，由于一开始没想到会做这么多类型的尝试，可能有些是其他情况的测试结果)　
+// 100: 2.25s -> 94/100 -> 2/100
+// 200: 45s -> 18.9s -> 6/100
+// 300: 315s -> 1293/10 -> 15/100
+// 500: N/A -> 20/10(这项数据有点问题，具体是什么情况下测试的记不清了) -> 50/100
+// 1000: N/A -> 305/10 -> 314/100
+// 5000: N/A ->51254/62 -> 3891/20
+
+==================================================================================================================================================================================
+#include <stack>
+#include <vector>
+#include <limits.h>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+class Info		       	// 保存当前状态的类
+{
+public:
+  vector<int> path;
+  vector<int> left;
+  int cur_weight;
+  int last;
+  Info(vector<int> path,vector<int> left, int cur_weight, int last){
+    this->path = path;		// 当前的路线
+    this->left = left;		// 剩下待访问的点
+    this->cur_weight = cur_weight; // 当前的路线的权值之和
+    this->last = last;		   // 当前所在的点
+  }
+};
+
+static int weights[][3] = {	// 节点间距离的向量, -1表示不可达
+  {1,2,3},
+  {1,2,3},
+  {1,-1,3},
+};
+  
+
+int main(){
+  int n = 3;			// 总节点个数
+  int min_weight = INT_MAX;	// ｉｎｔ的最大值
+  vector<int> min_weight_path;
+  vector<int> nodes = vector<int>();
+  for(int i=0;i<n;i++)
+    nodes.push_back(i);
+  stack<Info> s = stack<Info>();
+  for(int i=0;i<n;i++){		// 将最初的出发点放到栈中，这里做的是所有的点出发都可以，要限制的话修改这里就行
+    vector<int> path  = vector<int>();
+    path.push_back(i);
+    vector<int> left = vector<int>(nodes);
+    left.erase(remove(left.begin(),left.end(), i), left.end());
+    s.push(Info(path, left, 0, i));
+  }
+  while(!s.empty()){		// 如果栈不空，表示还有情况没有访问到
+    Info info = s.top();	// 取出栈顶的状态
+    s.pop();
+    // 遍历待访问的点，再判断是否符合条件，每个符合条件的状态都入栈
+    for(vector<int>::iterator it = info.left.begin() ;it!=info.left.end();it++){ 
+      int cur_weight = info.cur_weight+weights[info.last][*it];
+      if(weights[info.last][*it] == -1 || cur_weight>=min_weight)
+	continue;
+      
+      vector<int> left = vector<int>(info.left);
+      vector<int> path = vector<int>(info.path);
+      // 选择某个点后，ｌｅｆｔ中删去这个点，ｐａｔｈ中加上这个点
+      left.erase(remove(left.begin(), left.end(),*it), left.end());
+      path.push_back(*it);
+      // 遍历完了所有的点，更新min_weight和min_weight_path
+      if(left.empty()){
+	int first = *info.path.begin();
+	cur_weight += weights[*it][first];
+	if(weights[*it][first] == -1)
+	  continue;
+	if(cur_weight<min_weight){
+	  min_weight = cur_weight;
+	  min_weight_path = vector<int>(path);
+	}
+	continue;
+      }
+      s.push(Info(path, left, cur_weight, *it));      // 将状态入栈
+    }
+  }
+  // 输出路线和总权值 
+  for(vector<int>::iterator it=min_weight_path.begin();it!=min_weight_path.end();it++){
+    cout << *it<< endl;
+  }
+  cout<<min_weight<<endl;
+  return 0;
+}
