@@ -21,5 +21,3 @@ class Solution:
             tra(r.right)
         tra(root)
         return int(self.m)
-
-

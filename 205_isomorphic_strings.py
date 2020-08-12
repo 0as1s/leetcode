@@ -9,7 +9,7 @@ class Solution(object):
                 if d[a] != b:
                     return False
             else:
-                if b in d.values:
+                if b in d.values():
                     return False
                 d[a] = b
 

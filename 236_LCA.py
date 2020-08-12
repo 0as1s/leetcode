@@ -17,11 +17,6 @@ class Solution(object):
         result = (self_r[0] or left_r[0] or right_r[0], self_r[1] or left_r[1] or right_r[1])
         if self.target:
             return (True, True)
-        if root.val == 5:
-            print(self_r)
-            print(left_r)
-            print(right_r)
-            print(result)
         if result[0] and result[1]:
             self.target = root
             return (True, True)

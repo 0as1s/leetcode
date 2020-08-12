@@ -1,0 +1,25 @@
+2.1 A
+2.2 BCD
+2.3 BC
+
+3.1, Yes. Because A* will choose E as next vertex since h(E) is the minimal. Then dis(A, E) + dis(E, G) gets 9, which is the shortest path from A to G.
+3.2 C O(nlogn)
+3.3 2 4 3 9 8 6 5
+
+return Pattern.compile("([23456789]|10|ace|jack|queen|king) of (spades|diamonds|hearts|clubs)", Pattern.CASE_INSENSITIVE);
+
+
+4.1 A Because it's typical "Parten reference pointing to an instance of sub class"
+4.2 A Beacuse A does not have method print wish string as parameter. It will cause an error while compiling.
+4.3 C This will execute class C's print.
+4.4 A Because C does not have a method print with no parameters, it will use its parent class A's print method.
+
+5.1 H:14,F:29,D:37,C:71,I:103
+5.2 A-G,A-E,A-H,C-D,B-D,F-G,D-E,D-I
+5.3 A,B,C,D,F
+
+6.1 B
+6.2 ABCDE, AB
+6.3 C
+6.4 C  B
+6.5 A. For any sequence, the runtime to judge if it's already sorted is O(n). For sorting algorithms, the best case is that the sequence is already sorted. Therefore, judging if the sequence is already sorted before sorting it can make any alrogithms take O(n) for the best case.
