@@ -8,7 +8,7 @@
 
 class Solution(object):
 
-    def minDepth(self, root):
+    def maxDepth(self, root):
         if not root:
             return 0
         q = list()
