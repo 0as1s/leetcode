@@ -17,10 +17,3 @@ class Solution(object):
                 for ff in range(1, f+1):
                     store[(d, t)] += store[(d-1, t-ff)]
         return store[(d, target)] % (10 ** 9 + 7)
-
-s = Solution()
-#print(s.numRollsToTarget(d = 1, f = 6, target = 3))
-#print(s.numRollsToTarget(d = 2, f = 6, target = 7))
-#print(s.numRollsToTarget(d = 2, f = 5, target = 10))
-#print(s.numRollsToTarget(d = 1, f = 2, target = 3))
-print(s.numRollsToTarget(d = 30, f = 30, target = 500))

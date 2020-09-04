@@ -78,11 +78,3 @@ class Solution(object):
                 continue
             return False
 
-
-s = Solution()
-print(s.hasValidPath([[2,4,3],[6,5,2]]))
-print(s.hasValidPath([[1,1,2]]))
-print(s.hasValidPath([[1,1,1,1,1,1,3]]))
-print(s.hasValidPath([[2],[2],[2],[2],[2],[2],[6]]))
-print(s.hasValidPath([[4, 1], [6,1]]))
-print(s.hasValidPath([[1,2,1],[1,2,1]]))

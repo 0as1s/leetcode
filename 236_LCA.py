@@ -21,7 +21,6 @@ class Solution(object):
             self.target = root
             return (True, True)
         return result
-
         
     def lowestCommonAncestor(self, root, p, q):
         """
