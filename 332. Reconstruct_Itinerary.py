@@ -11,8 +11,7 @@ class Solution(object):
             from_nodes[v].append(v)
             degree[v][0] += 1
             degree[k][1] += 1
-        keys = sorted(list(degree.keys()), key=lambda x: degree[x])
-        cur = keys[0]
-        r = [cur, ]
+        min_key = min([degree[x][1] - degree[x][0] for x in degree.keys()])
+        keys = filter(lambda x: degree[x][1] - degree[x][0] == min_key, list(degree.keys()))
+        cur = sorted(keys)[-1]
         
-
