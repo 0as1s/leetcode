@@ -10,7 +10,7 @@ class TreeNode(object):
 class CBTInserter(object):
     def __init__(self, root):
         self.root = root
-        self.queue = deque()
+        self.queue = deque() # this queue only store nodes without left or right child
         self.queue.append(root)
         while self.queue:
             p = self.queue[0]
