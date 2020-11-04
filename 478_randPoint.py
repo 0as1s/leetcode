@@ -8,21 +8,7 @@ class Solution:
         self.x = x_center
         self.y = y_center
     def randPoint(self) -> List[float]:
-        if self.r == 0:
-            return [self.x, self.y]
-        x = random() - 0.5 / 0.5
-        x *= self.r
-        y = random() - 0.5 / 0.5
-        factor = math.sqrt(self.r*self.r - x*x) / self.r
-        y *= factor * self.r
-
-        if random() < 0.5:
-            return [x, y]
-        else:
-            return [y, x]
-
-    # Your Solution object will be instantiated and called as such:
-    # obj = Solution(radius, x_center, y_center)
-    # param_1 = obj.randPoint()
-
-
+        rho = 2*random()*math.pi
+        x = self.r*math.cos(rho)
+        y = self.r*math.sin(rho)
+        return [x,y]

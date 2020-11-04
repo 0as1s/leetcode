@@ -3,12 +3,12 @@ from typing import List
 
 class Solution:
     def recursive(self, left, turn, score_1, score_2, total_left):
-        if turn == 0: # 甲
+        if turn == 0:
             if score_1 >= score_2 + total_left:
                 return True
             if not left:
                 return False
-        if turn == 1: # 乙
+        if turn == 1:
             if score_2 > score_1 + total_left:
                 return True
             if not left:
